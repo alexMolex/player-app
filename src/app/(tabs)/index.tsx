@@ -1,66 +1,26 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/src/components/HelloWave';
-import ParallaxScrollView from '@/src/components/ParallaxScrollView';
-import { ThemedText } from '@/src/components/ThemedText';
-import { ThemedView } from '@/src/components/ThemedView';
+import { Pressable, View, StyleSheet } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Favourite() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/src/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View style={styles.container}>
+      <Pressable onPress={() => alert('Cannot press this one')}>
+        <Ionicons
+          size={36}
+          name="play"
+          color='green'
         />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{' '}
-          to see changes. Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    width: '100%',
+    height: '100%',
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
   },
 });
