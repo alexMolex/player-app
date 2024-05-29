@@ -1,9 +1,9 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { TabBarIcon } from '@/src/components/navigation/TabBarIcon';
+import { Colors } from '@/src/constants/Colors';
+import { useColorScheme } from '@/src/hooks/useColorScheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -16,7 +16,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="Favourite"
+        name="index"
         options={{
           title: 'favourite',
           tabBarIcon: ({ color, focused }) => (

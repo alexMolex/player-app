@@ -1,4 +1,4 @@
-import { ThemedText } from '@/components/ThemedText';
+import { ThemedText } from '@/src/components/ThemedText';
 
 export default function PlayLists() {
   return (
