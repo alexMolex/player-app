@@ -6,43 +6,43 @@ import { Colors } from '@/src/constants/Colors'
 import { useColorScheme } from '@/src/hooks/useColorScheme'
 
 export default function TabLayout() {
-	const colorScheme = useColorScheme()
+  const colorScheme = useColorScheme()
 
-	return (
-		<Tabs
-			screenOptions={{
-				tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-				headerShown: false,
-			}}
-		>
-			<Tabs.Screen
-				name="index"
-				options={{
-					title: 'favourite',
-					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							name={focused ? 'heart' : 'heart-outline'}
-							color={color}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="PlayLists"
-				options={{
-					title: 'PlayLists',
-					tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
-				}}
-			/>
-			<Tabs.Screen
-				name="Settings"
-				options={{
-					title: 'Settings',
-					tabBarIcon: ({ color }) => (
-						<TabBarIcon name="settings" color={color} />
-					),
-				}}
-			/>
-		</Tabs>
-	)
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        headerShown: false,
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'favourite',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'heart' : 'heart-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="PlayLists"
+        options={{
+          title: 'PlayLists',
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="Settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="settings" color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  )
 }
