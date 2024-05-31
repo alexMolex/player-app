@@ -1,30 +1,30 @@
+import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import Avatar from './Avatar'
 import Menu from './Menu'
+import Avatar from './Avatar'
 
-type ItemProps = {
+type TProps = {
+  cover: ReturnType<NodeRequire>
   title: string
-  subtitle: string
-  id: string
-  coverUrl: ReturnType<NodeRequire>
+  tracksCount: number
   onMenuPress: () => void
 }
 
-const AudioListItem: React.FC<ItemProps> = ({
-  coverUrl,
+const PlaylistItem: React.FC<TProps> = ({
+  cover,
   title,
-  subtitle,
+  tracksCount,
   onMenuPress,
 }) => {
   return (
     <View style={styles.container}>
-      <Avatar avatarUrl={coverUrl} />
-      <View style={styles.infoContainer}>
+      <Avatar avatarUrl={cover} />
+      <View style={styles.info}>
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-        <Text style={styles.subtitle} numberOfLines={1}>
-          {subtitle}
+        <Text style={styles.tracksCount} numberOfLines={1}>
+          {tracksCount} tracks
         </Text>
       </View>
       <Menu onMenuPress={onMenuPress} />
@@ -37,18 +37,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    margin: 10,
+    margin: 5,
+    backgroundColor: '#fff',
+    borderRadius: 8,
   },
-  infoContainer: {
+  info: {
     flex: 1,
     marginLeft: 10,
   },
   title: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  subtitle: {
-    color: 'gray',
+  tracksCount: {
+    fontSize: 14,
+    color: 'grey',
   },
 })
 
-export default AudioListItem
+export default PlaylistItem
