@@ -1,12 +1,12 @@
-import { Pressable, View, StyleSheet } from 'react-native'
+import { TouchableOpacity, View, StyleSheet } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function Favourite() {
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => alert('Cannot press this one')}>
+      <TouchableOpacity onPress={() => console.log('Press this one')}>
         <Ionicons size={36} name="play" color="green" />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   )
 }
