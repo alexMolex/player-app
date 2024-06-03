@@ -28,9 +28,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="PlayLists"
+        name="Playlists"
         options={{
-          title: 'PlayLists',
+          title: 'Playlists',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />

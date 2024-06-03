@@ -7,7 +7,13 @@ type TProps = {
 
 const Menu: React.FC<TProps> = ({ onMenuPress }) => {
   return (
-    <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
+    <TouchableOpacity
+      onPress={(event) => {
+        event.preventDefault()
+        onMenuPress()
+      }}
+      style={styles.menuButton}
+    >
       <MaterialIcons name="more-vert" size={24} color="black" />
     </TouchableOpacity>
   )

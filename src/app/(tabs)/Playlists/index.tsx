@@ -1,6 +1,7 @@
 import { FlatList } from 'react-native'
 import React from 'react'
 import PlaylistItem from '@/src/components/PlaylistItem'
+import PressableLink from '@/src/components/PressableLink'
 
 const DATA = [
   {
@@ -28,7 +29,12 @@ export default function PlayLists() {
     <FlatList
       data={DATA}
       renderItem={({ item }) => (
-        <PlaylistItem {...item} onMenuPress={() => alert('Clicked')} />
+        <PressableLink
+          pathname="/Playlists/[id]"
+          params={{ id: item.id, playlistTitle: item.title }}
+        >
+          <PlaylistItem {...item} onMenuPress={() => console.log('Pressed')} />
+        </PressableLink>
       )}
       keyExtractor={(item) => item.id}
     />
