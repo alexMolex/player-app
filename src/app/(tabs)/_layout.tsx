@@ -4,14 +4,14 @@ import { TabBarIcon } from '@/src/components/navigation/TabBarIcon'
 import { Colors } from '@/src/constants/Colors'
 import { useColorScheme } from '@/src/hooks/useColorScheme'
 import { tabsScreenRoutes } from '@/src/routes'
-import PlayerModal from '../PlayerModal'
+import MinimizedPlayer from '../MinimizedPlayer'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
 
   return (
     <>
-      <PlayerModal />
+      <MinimizedPlayer />
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,

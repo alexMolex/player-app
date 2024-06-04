@@ -5,7 +5,7 @@ import { Link } from 'expo-router'
 const PressableLink: React.FC<{
   children: React.ReactElement
   pathname: string
-  params: Record<string, string>
+  params?: Record<string, string>
 }> = ({ children, params, pathname }) => {
   return (
     <Link

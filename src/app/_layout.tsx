@@ -21,6 +21,17 @@ const RootLayout = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name={rootLayoutRoutes.notFoundScreen.name} />
+      <Stack.Screen
+        name={rootLayoutRoutes.playerModal.name}
+        options={{
+          presentation: 'modal',
+          gestureDirection: 'vertical',
+          gestureEnabled: true,
+          animation: 'slide_from_bottom',
+          animationDuration: 400,
+          headerShown: false,
+        }}
+      />
     </Stack>
   )
 }

@@ -1,5 +1,6 @@
 const indexRouteName = 'index' as const
 const tabsScreenRouteName = '(tabs)' as const
+const playerModalRouteName = 'PlayerModal' as const
 const notFoundScreenRouteName = '+not-found' as const
 const indexRoute = {
   name: indexRouteName,
@@ -10,10 +11,15 @@ const tabsScreenRoute = {
 const notFoundScreenRoute = {
   name: notFoundScreenRouteName,
 }
+const playerModalRoute = {
+  name: playerModalRouteName,
+  pathName: `/${playerModalRouteName}`,
+}
 
 export const rootLayoutRoutes = {
   tabsScreen: tabsScreenRoute,
   notFoundScreen: notFoundScreenRoute,
+  playerModal: playerModalRoute,
 }
 
 const playlistsName = 'Playlists' as const
