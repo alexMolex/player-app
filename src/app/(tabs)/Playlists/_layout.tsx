@@ -1,5 +1,8 @@
 import { Stack } from 'expo-router'
 import { useGlobalSearchParams } from 'expo-router'
+import { tabsScreenRoutes } from '@/src/routes'
+
+const playlistsChildrenRoutes = tabsScreenRoutes.playlists.children
 
 const PlaylistsScreenLayout = () => {
   const { playlistTitle } = useGlobalSearchParams<{
@@ -9,13 +12,13 @@ const PlaylistsScreenLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
+        name={playlistsChildrenRoutes.index.name}
         options={{
           headerTitle: 'Playlists',
         }}
       />
       <Stack.Screen
-        name="[id]"
+        name={playlistsChildrenRoutes['[id]'].name}
         options={{
           headerTitle: playlistTitle,
           headerBackVisible: true,

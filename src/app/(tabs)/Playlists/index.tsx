@@ -2,6 +2,7 @@ import { FlatList } from 'react-native'
 import React from 'react'
 import PlaylistItem from '@/src/components/PlaylistItem'
 import PressableLink from '@/src/components/PressableLink'
+import { tabsScreenRoutes } from '@/src/routes'
 
 const DATA = [
   {
@@ -30,7 +31,7 @@ export default function PlayLists() {
       data={DATA}
       renderItem={({ item }) => (
         <PressableLink
-          pathname="/Playlists/[id]"
+          pathname={tabsScreenRoutes.playlists.children['[id]'].pathName}
           params={{ id: item.id, playlistTitle: item.title }}
         >
           <PlaylistItem {...item} onMenuPress={() => console.log('Pressed')} />

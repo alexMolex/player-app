@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { rootLayoutRoutes } from '@/src/routes'
 
 const App = () => {
   return (
@@ -15,8 +16,11 @@ const App = () => {
 const RootLayout = () => {
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
+      <Stack.Screen
+        name={rootLayoutRoutes.tabsScreen.name}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name={rootLayoutRoutes.notFoundScreen.name} />
     </Stack>
   )
 }
