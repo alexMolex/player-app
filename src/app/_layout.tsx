@@ -2,8 +2,11 @@ import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { rootLayoutRoutes } from '@/src/routes'
+import useRequestAudioFiles from '@/src/hooks/useRequestAudioFiles'
 
 const App = () => {
+  useRequestAudioFiles()
+
   return (
     <SafeAreaProvider>
       <StatusBar style="auto" />
