@@ -1,5 +1,6 @@
 import { usePermissions, getAssetsAsync } from 'expo-media-library'
 import { useEffect } from 'react'
+import { saveAudioAssets } from '@/src/store/userMediaStore/audioAssestStore'
 
 const useRequestAudioFiles = () => {
   const [permissionResponse, requestPermission] = usePermissions({
@@ -16,7 +17,7 @@ const useRequestAudioFiles = () => {
       first: Infinity,
     })
       .then((fetchedAlbums) => {
-        console.log('🚀 ~ .then ~ fetchedAlbums:')
+        saveAudioAssets(fetchedAlbums)
       })
       .catch((err) => {
         console.log('🚀 ~ getAlbums ~ err:', err)
