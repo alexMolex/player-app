@@ -3,13 +3,15 @@ import { StatusBar } from 'expo-status-bar'
 import { useUnit } from 'effector-react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { rootLayoutRoutes } from '@/src/routes'
-import useRequestAudioFiles from '@/src/hooks/useRequestAudioFiles'
-import audioAssestStore from '@/src/store/userMediaStore/audioAssestStore'
+import useRequestAudioFiles from '@/src/store/userMediaStore/hooks/useRequestAudioFiles'
+import audioAssestStore, {
+  audioAssetsAlbum,
+} from '@/src/store/userMediaStore/audioAssestStore'
 
 const App = () => {
   useRequestAudioFiles()
-  const audioAssest = useUnit(audioAssestStore)
-  console.log('🚀 ~ App ~ audioAssest:', audioAssest.totalCount)
+  const [audioAssest, albums] = useUnit([audioAssestStore, audioAssetsAlbum])
+  console.log('🚀 ~ App ~ audioAssest:', audioAssest.totalCount, albums)
 
   return (
     <SafeAreaProvider>

@@ -1,3 +1,4 @@
-import type { Asset, PagedInfo } from 'expo-media-library'
+import type { Asset } from 'expo-media-library'
 
-export type TAudioAssets = PagedInfo<Asset>
+export type TAudioAssets = { assets: Asset[]; totalCount: number }
+export type TAlbums = Record<string, { name: string; list: Asset[] }>
