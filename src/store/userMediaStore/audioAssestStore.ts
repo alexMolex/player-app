@@ -1,6 +1,6 @@
 import { createEvent, createStore } from 'effector'
 import type { TAudioAssets, TAlbums } from './types'
-import { getNameFromAsset } from './utils'
+import { getAlbumNameFromAsset } from './utils'
 
 export const saveAudioAssets = createEvent<TAudioAssets>()
 
@@ -11,24 +11,29 @@ const audioAssestStore = createStore<TAudioAssets>({
   return { assets, totalCount }
 })
 
-export const audioAssetsAlbum = audioAssestStore.map(({ assets }) => {
-  const audioAlbums = assets.reduce<TAlbums>((assetCollection, asset) => {
-    // Album ID exist only for android
-    const albumId = asset.albumId as string
+export const deviceAudioAlbumsCollection = audioAssestStore.map(
+  ({ assets }) => {
+    const audioAlbumsCollection = assets.reduce<TAlbums>(
+      (assetCollection, asset) => {
+        // Album ID exist only for android
+        const albumId = asset.albumId as string
 
-    if (albumId in assetCollection) {
-      assetCollection[albumId].list.push(asset)
-    } else {
-      assetCollection[albumId] = {
-        name: getNameFromAsset(asset),
-        list: [asset],
-      }
-    }
+        if (albumId in assetCollection) {
+          assetCollection[albumId].list.push(asset)
+        } else {
+          assetCollection[albumId] = {
+            name: getAlbumNameFromAsset(asset),
+            list: [asset],
+          }
+        }
 
-    return assetCollection
-  }, {})
+        return assetCollection
+      },
+      {}
+    )
 
-  return audioAlbums
-})
+    return audioAlbumsCollection
+  }
+)
 
 export default audioAssestStore

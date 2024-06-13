@@ -1,5 +1,5 @@
 import audioAssestStore, {
-  audioAssetsAlbum,
+  deviceAudioAlbumsCollection,
   saveAudioAssets,
 } from '../audioAssestStore'
 import { audioAssetsMock, albumsMock } from '../__fixtures__/audioAssetsMock'
@@ -17,6 +17,6 @@ describe('audioAssestStore', () => {
   it('should get albums in audioAssetsAlbum', () => {
     saveAudioAssets(audioAssetsMock)
 
-    expect(audioAssetsAlbum.getState()).toEqual(albumsMock)
+    expect(deviceAudioAlbumsCollection.getState()).toEqual(albumsMock)
   })
 })

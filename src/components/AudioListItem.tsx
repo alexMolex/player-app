@@ -5,7 +5,6 @@ import Menu from './Menu'
 type ItemProps = {
   title: string
   subtitle: string
-  id: string
   coverUrl: ReturnType<NodeRequire>
   onMenuPress: () => void
 }
