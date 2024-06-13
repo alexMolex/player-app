@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Avatar from './Avatar'
 import Menu from './Menu'
 
@@ -7,27 +7,31 @@ type ItemProps = {
   subtitle: string
   coverUrl: ReturnType<NodeRequire>
   onMenuPress: () => void
+  onPress: () => void
 }
 
 const AudioListItem: React.FC<ItemProps> = ({
   coverUrl,
   title,
   subtitle,
+  onPress,
   onMenuPress,
 }) => {
   return (
-    <View style={styles.container}>
-      <Avatar avatarUrl={coverUrl} />
-      <View style={styles.infoContainer}>
-        <Text style={styles.title} numberOfLines={1}>
-          {title}
-        </Text>
-        <Text style={styles.subtitle} numberOfLines={1}>
-          {subtitle}
-        </Text>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.container}>
+        <Avatar avatarUrl={coverUrl} />
+        <View style={styles.infoContainer}>
+          <Text style={styles.title} numberOfLines={1}>
+            {title}
+          </Text>
+          <Text style={styles.subtitle} numberOfLines={1}>
+            {subtitle}
+          </Text>
+        </View>
+        <Menu onMenuPress={onMenuPress} />
       </View>
-      <Menu onMenuPress={onMenuPress} />
-    </View>
+    </TouchableOpacity>
   )
 }
 
