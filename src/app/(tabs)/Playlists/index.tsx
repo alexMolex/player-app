@@ -4,7 +4,7 @@ import { useUnit } from 'effector-react'
 import PlaylistItem from '@/src/components/PlaylistItem'
 import PressableLink from '@/src/components/PressableLink'
 import { tabsScreenRoutes } from '@/src/routes'
-import { deviceAudioAlbumsCollection } from '@/src/store/userMediaStore/audioAssestStore'
+import { deviceAudioAlbumsCollection } from '@/src/store/audioAssestStore'
 
 const PlayLists = () => {
   const [deviceAudioAlbums] = useUnit([deviceAudioAlbumsCollection])

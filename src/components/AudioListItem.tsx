@@ -5,6 +5,7 @@ import Menu from './Menu'
 type ItemProps = {
   title: string
   subtitle: string
+  isPlayingSound: boolean
   coverUrl: ReturnType<NodeRequire>
   onMenuPress: () => void
   onPress: () => void
@@ -14,11 +15,12 @@ const AudioListItem: React.FC<ItemProps> = ({
   coverUrl,
   title,
   subtitle,
+  isPlayingSound,
   onPress,
   onMenuPress,
 }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity disabled={isPlayingSound} onPress={onPress}>
       <View style={styles.container}>
         <Avatar avatarUrl={coverUrl} />
         <View style={styles.infoContainer}>

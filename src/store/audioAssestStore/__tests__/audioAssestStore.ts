@@ -1,7 +1,7 @@
 import audioAssestStore, {
   deviceAudioAlbumsCollection,
   saveAudioAssets,
-} from '../audioAssestStore'
+} from '..'
 import { audioAssetsMock, albumsMock } from '../__fixtures__/audioAssetsMock'
 
 describe('audioAssestStore', () => {
