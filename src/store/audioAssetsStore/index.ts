@@ -1,17 +1,23 @@
 import { createEvent, createStore } from 'effector'
+import type { Asset } from 'expo-media-library'
 import type { TAudioAssets, TAlbums } from './types'
 import { getAlbumNameFromAsset } from './utils'
 
-export const saveAudioAssets = createEvent<TAudioAssets>()
+export const saveAudioAssets = createEvent<Asset[]>()
+export const setCurrentAlbum = createEvent<Asset[]>()
 
-const audioAssestStore = createStore<TAudioAssets>({
+export const audioAssetsStore = createStore<TAudioAssets>({
   assets: [],
-  totalCount: 0,
-}).on(saveAudioAssets, (state, { assets, totalCount }) => {
-  return { assets, totalCount }
+  currentAlbum: [],
 })
+  .on(saveAudioAssets, (state, assets) => {
+    return { ...state, assets }
+  })
+  .on(setCurrentAlbum, (state, currentAlbum) => {
+    return { ...state, currentAlbum }
+  })
 
-export const deviceAudioAlbumsCollection = audioAssestStore.map(
+export const deviceAudioAlbumsCollection = audioAssetsStore.map(
   ({ assets }) => {
     const audioAlbumsCollection = assets.reduce<TAlbums>(
       (assetCollection, asset) => {
@@ -36,4 +42,4 @@ export const deviceAudioAlbumsCollection = audioAssestStore.map(
   }
 )
 
-export default audioAssestStore
+export default audioAssetsStore

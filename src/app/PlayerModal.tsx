@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
+import { useUnit } from 'effector-react'
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
+import {
+  playNextSoundFx,
+  pauseCurrentSoundFx,
+  playPreviousSoundFx,
+} from '@/src/store/audioControllStore/effects'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 
@@ -8,19 +14,21 @@ const PlayerModal = () => {
   const router = useRouter()
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackProgress, setPlaybackProgress] = useState(0)
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying)
-    // Здесь должна быть логика воспроизведения или паузы музыки
-  }
-
-  const handleNext = () => {
-    // Логика для перехода к следующему треку
-  }
-
-  const handlePrevious = () => {
-    // Логика для перехода к предыдущему треку
-  }
+  const [
+    playNextSound,
+    isPendingPlayNextSound,
+    playPreviousSound,
+    isPendingPlayPreviousSound,
+    pauseCurrentSound,
+    isPendingPauseCurrentSound,
+  ] = useUnit([
+    playNextSoundFx,
+    playNextSoundFx.pending,
+    playPreviousSoundFx,
+    playPreviousSoundFx.pending,
+    pauseCurrentSoundFx,
+    pauseCurrentSoundFx.pending,
+  ])
 
   return (
     <View style={styles.container}>
@@ -36,17 +44,17 @@ const PlayerModal = () => {
         thumbTintColor="#1fb28a"
       />
       <View style={styles.controls}>
-        <TouchableOpacity onPress={handlePrevious}>
+        <TouchableOpacity onPress={playPreviousSound}>
           <AntDesign name="stepbackward" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePlayPause}>
+        <TouchableOpacity onPress={pauseCurrentSound}>
           <FontAwesome
             name={isPlaying ? 'pause' : 'play'}
             size={30}
             color="black"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleNext}>
+        <TouchableOpacity onPress={playNextSound}>
           <AntDesign name="stepforward" size={30} color="black" />
         </TouchableOpacity>
       </View>

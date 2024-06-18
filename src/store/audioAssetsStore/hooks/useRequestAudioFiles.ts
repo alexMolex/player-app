@@ -17,7 +17,7 @@ const useRequestAudioFiles = () => {
       first: Infinity,
     })
       .then((fetchedAlbums) => {
-        saveAudioAssets(fetchedAlbums)
+        saveAudioAssets(fetchedAlbums.assets)
       })
       .catch((err) => {
         console.log('🚀 ~ getAlbums ~ err:', err)
