@@ -5,6 +5,7 @@ import PlaylistItem from '@/src/components/PlaylistItem'
 import PressableLink from '@/src/components/PressableLink'
 import { tabsScreenRoutes } from '@/src/routes'
 import { deviceAudioAlbumsCollection } from '@/src/store/audioAssetsStore'
+import { setCurrentAlbum } from '@/src/store/audioAssetsStore'
 
 const PlayLists = () => {
   const [deviceAudioAlbums] = useUnit([deviceAudioAlbumsCollection])
@@ -24,6 +25,7 @@ const PlayLists = () => {
           <PressableLink
             pathname={tabsScreenRoutes.playlists.children['[id]'].pathName}
             params={{ id: albumId, playlistTitle: album.name }}
+            onPress={() => setCurrentAlbum(album.list)}
           >
             <PlaylistItem
               cover={require('@/src/assets/images/react-logo.png')}

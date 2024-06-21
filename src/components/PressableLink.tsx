@@ -6,7 +6,8 @@ const PressableLink: React.FC<{
   children: React.ReactElement
   pathname: string
   params?: Record<string, string>
-}> = ({ children, params, pathname }) => {
+  onPress?: () => void
+}> = ({ children, params, pathname, onPress }) => {
   return (
     <Link
       asChild
@@ -15,7 +16,7 @@ const PressableLink: React.FC<{
         params,
       }}
     >
-      <TouchableOpacity>{children}</TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>{children}</TouchableOpacity>
     </Link>
   )
 }

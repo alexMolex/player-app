@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import { useUnit } from 'effector-react'
 import AudioListItem from '@/src/components/AudioListItem'
-import { playSoundFx } from '@/src/store/audioControllStore/effects'
+import { playSoundFx } from '@/src/store/audioControllStore'
 import { Asset } from 'expo-media-library'
 
-const AudioItem: React.FC<{ song: Asset; list: Asset[] }> = ({ song }) => {
+const AudioItem: React.FC<{ song: Asset }> = ({ song }) => {
   const [playSound, isPendingPlaySound] = useUnit([
     playSoundFx,
     playSoundFx.pending,

@@ -6,7 +6,8 @@ import {
   playNextSoundFx,
   pauseCurrentSoundFx,
   playPreviousSoundFx,
-} from '@/src/store/audioControllStore/effects'
+  playCurrentSoundFx,
+} from '@/src/store/audioControllStore'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 
@@ -21,6 +22,8 @@ const PlayerModal = () => {
     isPendingPlayPreviousSound,
     pauseCurrentSound,
     isPendingPauseCurrentSound,
+    playCurrentSound,
+    isPendingPlayCurrentSound,
   ] = useUnit([
     playNextSoundFx,
     playNextSoundFx.pending,
@@ -28,6 +31,8 @@ const PlayerModal = () => {
     playPreviousSoundFx.pending,
     pauseCurrentSoundFx,
     pauseCurrentSoundFx.pending,
+    playCurrentSoundFx,
+    playCurrentSoundFx.pending,
   ])
 
   return (
@@ -48,11 +53,10 @@ const PlayerModal = () => {
           <AntDesign name="stepbackward" size={30} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={pauseCurrentSound}>
-          <FontAwesome
-            name={isPlaying ? 'pause' : 'play'}
-            size={30}
-            color="black"
-          />
+          <FontAwesome name={'pause'} size={30} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={playCurrentSound}>
+          <FontAwesome name={'play'} size={30} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={playNextSound}>
           <AntDesign name="stepforward" size={30} color="black" />
