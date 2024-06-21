@@ -1,8 +1,9 @@
 import { sample, createEvent, createStore, createEffect } from 'effector'
 import { Audio } from 'expo-av'
+import type { AVPlaybackStatusSuccess } from 'expo-av'
 import { Asset } from 'expo-media-library'
 import { showErrorNotificationFx } from '../notification'
-import type { TAudioControl, TAudioQueue } from './types'
+import type { TAudioControl, TAudioQueue, TAudioPlaybackStatus } from './types'
 import audioAssetsStore from '../audioAssetsStore'
 
 const getAssetPosition = () => {
@@ -27,11 +28,26 @@ const getAssetPosition = () => {
   }
 }
 
+const clearRequestAudioPlaybackTimeout = () => {
+  const timeoutRequestAudioPlaybackStatisId =
+    audioPlaybackStatuslStore.getState().timeoutId
+
+  if (timeoutRequestAudioPlaybackStatisId !== null) {
+    clearTimeout(timeoutRequestAudioPlaybackStatisId)
+  }
+}
+
 export const playSoundFx = createEffect(async (song: Asset) => {
   const sound = new Audio.Sound()
 
+  clearRequestAudioPlaybackTimeout()
+
   try {
     await audioSoundStore.getState().sound.unloadAsync()
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      updateonPlaybackStatust(status as AVPlaybackStatusSuccess)
+    })
 
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -42,6 +58,8 @@ export const playSoundFx = createEffect(async (song: Asset) => {
     })
 
     await sound.loadAsync({ uri: song.uri })
+
+    await getAudioPlaybackStatusFx()
 
     await sound.playAsync()
   } catch (error) {
@@ -84,10 +102,14 @@ export const playPreviousSoundFx = createEffect(async () => {
 })
 
 export const pauseCurrentSoundFx = createEffect(async () => {
+  clearRequestAudioPlaybackTimeout()
+
   return audioSoundStore.getState().sound.pauseAsync()
 })
 
 export const playCurrentSoundFx = createEffect(async () => {
+  getAudioPlaybackStatusFx()
+
   return audioSoundStore.getState().sound.playAsync()
 })
 
@@ -95,9 +117,18 @@ export const setPositionFx = createEffect(async (positionMillis: number) => {
   return audioSoundStore.getState().sound.setPositionAsync(positionMillis)
 })
 
-// export const audioControlStore = createStore<TAudioControl>({
-//   sound: new Audio.Sound(),
-// })
+export const getAudioPlaybackStatusFx = createEffect(async () => {
+  return audioSoundStore.getState().sound.getStatusAsync()
+})
+
+const updateonPlaybackStatust = createEvent<AVPlaybackStatusSuccess>()
+
+export const audioPlaybackStatuslStore = createStore<TAudioPlaybackStatus>({
+  status: undefined,
+  timeoutId: null,
+}).on(updateonPlaybackStatust, (state, status) => {
+  return { ...state, status }
+})
 
 const addAudioToQueue = createEvent<Asset>()
 const setCurrentAsset = createEvent<Asset>()
@@ -122,15 +153,25 @@ export const audioQueueStore = createStore<TAudioQueue>({
     return { ...state, isRandomMode: !state.isRandomMode }
   })
 
-playSoundFx.watch((asset) => {
-  setCurrentAsset(asset)
-})
+playSoundFx.watch(setCurrentAsset)
 
 sample({
   clock: playSoundFx.done,
   target: audioSoundStore,
   fn: ({ result: sound }) => {
     return { sound }
+  },
+})
+
+sample({
+  clock: getAudioPlaybackStatusFx.done,
+  target: audioPlaybackStatuslStore,
+  fn: ({ result }) => {
+    const timeoutId = setTimeout(() => {
+      getAudioPlaybackStatusFx()
+    }, 5000)
+
+    return { status: result as AVPlaybackStatusSuccess, timeoutId }
   },
 })
 
