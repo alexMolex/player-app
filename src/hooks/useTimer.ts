@@ -36,7 +36,7 @@ const useTimer = ({
   }, [timeInMs, stopTimeMs, onStopTime, reset])
 
   return {
-    formatedTime: formatMsToTimeString({ timeInMs }),
+    formatedTime: formatMsToTimeString(timeInMs),
     timeInMs,
     start,
     stop,

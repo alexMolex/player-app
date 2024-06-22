@@ -8,7 +8,9 @@ export type TAudioControl = {
 
 export type TAudioPlaybackStatus = {
   status?: AVPlaybackStatusSuccess
-  timeoutId: NodeJS.Timeout | null
+  timeoutMs: number
+  isRunningTimer: boolean
+  timerId: NodeJS.Timeout | null
 }
 
 export type TAudioQueue = {

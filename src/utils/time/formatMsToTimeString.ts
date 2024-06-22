@@ -1,6 +1,6 @@
 import msToSeconds from './msToSeconds'
 
-const formatMsToTimeString = ({ timeInMs }: { timeInMs: number }) => {
+const formatMsToTimeString = (timeInMs: number) => {
   const timeInSeconds = msToSeconds(timeInMs)
 
   const hours = Math.floor(timeInSeconds / 3600)
