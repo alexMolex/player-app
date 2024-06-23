@@ -5,11 +5,11 @@ import { Asset } from 'expo-media-library'
 import { msPerSecond } from '@/src/utils/time/constants'
 import { showErrorNotificationFx } from '../notification'
 import type { TAudioControl, TAudioQueue, TAudioPlaybackStatus } from './types'
-import audioAssetsStore from '../audioAssetsStore'
+import $audioAssets from '../audioAssetsStore'
 
 const getAssetPosition = () => {
-  const currentAsset = audioQueueStore.getState().currentAsset
-  const currentAlbum = audioAssetsStore.getState().currentAlbum
+  const currentAsset = $audioQueue.getState().currentAsset
+  const currentAlbum = $audioAssets.getState().currentAlbum
 
   const currentAssetIndex =
     currentAsset !== null ? currentAlbum.indexOf(currentAsset) : -1
@@ -37,7 +37,7 @@ export const playSoundFx = createEffect(async (song: Asset) => {
   })
 
   try {
-    await audioSoundStore.getState().sound.unloadAsync()
+    await $audioSound.getState().sound.unloadAsync()
 
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -49,7 +49,7 @@ export const playSoundFx = createEffect(async (song: Asset) => {
 
     await sound.loadAsync({ uri: song.uri })
 
-    if (audioPlaybackStatuslStore.getState().isPlaying) {
+    if ($audioPlaybackStatus.getState().isPlaying) {
       await sound.playAsync()
 
       runTimer()
@@ -101,29 +101,28 @@ export const pauseCurrentSoundFx = createEffect(async () => {
   setIsPlaying(false)
   stopTimer()
 
-  return audioSoundStore.getState().sound.pauseAsync()
+  return $audioSound.getState().sound.pauseAsync()
 })
 
 export const playCurrentSoundFx = createEffect(async () => {
   setIsPlaying(true)
   runTimer()
 
-  return audioSoundStore.getState().sound.playAsync()
+  return $audioSound.getState().sound.playAsync()
 })
 
 export const setPositionFx = createEffect(async (positionMillis: number) => {
-  const durationMillis =
-    audioPlaybackStatuslStore.getState().status?.durationMillis
+  const durationMillis = $audioPlaybackStatus.getState().status?.durationMillis
 
   if (durationMillis) {
     runTimer()
 
-    return audioSoundStore
+    return $audioSound
       .getState()
       .sound.setPositionAsync(positionMillis * durationMillis)
   }
 
-  throw new Error('Status is not exist in audioPlaybackStatuslStore')
+  throw new Error('Status is not exist in $audioPlaybackStatus')
 })
 
 const updateonPlaybackStatust = createEvent<AVPlaybackStatusSuccess>()
@@ -133,7 +132,7 @@ export const stopTimer = createEvent()
 export const setTimeInMs = createEvent<number>()
 export const setIsPlaying = createEvent<boolean>()
 
-export const audioPlaybackStatuslStore = createStore<TAudioPlaybackStatus>({
+export const $audioPlaybackStatus = createStore<TAudioPlaybackStatus>({
   status: undefined,
   timeoutMs: 0,
   isPlaying: true,
@@ -190,13 +189,13 @@ export const audioPlaybackStatuslStore = createStore<TAudioPlaybackStatus>({
     return { ...state, timeoutMs: 0, timeoutId: null, isRunningTimer: false }
   })
 
-audioPlaybackStatuslStore.watch(({ status, timeoutMs }) => {
+$audioPlaybackStatus.watch(({ status, timeoutMs }) => {
   if (status?.durationMillis && status.durationMillis <= timeoutMs) {
     playNextSoundFx()
   }
 })
 
-export const audioPosisionStore = audioPlaybackStatuslStore.map((state) => {
+export const $audioPosision = $audioPlaybackStatus.map((state) => {
   const audioPosition = state.status?.durationMillis
     ? state.timeoutMs / state.status.durationMillis
     : 0
@@ -208,11 +207,11 @@ const addAudioToQueue = createEvent<Asset>()
 const setCurrentAsset = createEvent<Asset>()
 export const toggleRandomMode = createEvent()
 
-export const audioSoundStore = createStore<TAudioControl>({
+export const $audioSound = createStore<TAudioControl>({
   sound: new Audio.Sound(),
 })
 
-export const audioQueueStore = createStore<TAudioQueue>({
+export const $audioQueue = createStore<TAudioQueue>({
   randomQueue: [],
   currentAsset: null,
   isRandomMode: false,
@@ -231,7 +230,7 @@ playSoundFx.watch(setCurrentAsset)
 
 sample({
   clock: playSoundFx.done,
-  target: audioSoundStore,
+  target: $audioSound,
   fn: ({ result: sound }) => {
     return { sound }
   },
@@ -240,7 +239,7 @@ sample({
 sample({
   clock: playSoundFx.done,
   filter: () => {
-    return audioQueueStore.getState().isRandomMode
+    return $audioQueue.getState().isRandomMode
   },
   fn: ({ params }) => {
     addAudioToQueue(params)

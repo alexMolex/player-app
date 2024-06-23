@@ -6,7 +6,7 @@ import { getAlbumNameFromAsset } from './utils'
 export const saveAudioAssets = createEvent<Asset[]>()
 export const setCurrentAlbum = createEvent<Asset[]>()
 
-export const audioAssetsStore = createStore<TAudioAssets>({
+export const $audioAssets = createStore<TAudioAssets>({
   assets: [],
   currentAlbum: [],
 })
@@ -17,29 +17,27 @@ export const audioAssetsStore = createStore<TAudioAssets>({
     return { ...state, currentAlbum }
   })
 
-export const deviceAudioAlbumsCollection = audioAssetsStore.map(
-  ({ assets }) => {
-    const audioAlbumsCollection = assets.reduce<TAlbums>(
-      (assetCollection, asset) => {
-        // Album ID exist only for android
-        const albumId = asset.albumId as string
+export const deviceAudioAlbumsCollection = $audioAssets.map(({ assets }) => {
+  const audioAlbumsCollection = assets.reduce<TAlbums>(
+    (assetCollection, asset) => {
+      // Album ID exist only for android
+      const albumId = asset.albumId as string
 
-        if (albumId in assetCollection) {
-          assetCollection[albumId].list.push(asset)
-        } else {
-          assetCollection[albumId] = {
-            name: getAlbumNameFromAsset(asset),
-            list: [asset],
-          }
+      if (albumId in assetCollection) {
+        assetCollection[albumId].list.push(asset)
+      } else {
+        assetCollection[albumId] = {
+          name: getAlbumNameFromAsset(asset),
+          list: [asset],
         }
+      }
 
-        return assetCollection
-      },
-      {}
-    )
+      return assetCollection
+    },
+    {}
+  )
 
-    return audioAlbumsCollection
-  }
-)
+  return audioAlbumsCollection
+})
 
-export default audioAssetsStore
+export default $audioAssets

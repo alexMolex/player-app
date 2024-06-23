@@ -10,8 +10,8 @@ import {
   setPositionFx,
   setTimeInMs,
   stopTimer,
-  audioPlaybackStatuslStore as audioPlaybackStatuslStoreUnit,
-  audioPosisionStore as audioPosisionStoreUnit,
+  $audioPlaybackStatus,
+  $audioPosision,
 } from '@/src/store/audioControllStore'
 import formatMsToTimeString from '@/src/utils/time/formatMsToTimeString'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
@@ -21,8 +21,8 @@ const PlayerModal = () => {
   const router = useRouter()
 
   const [
-    audioPlaybackStatuslStore,
-    audioPosisionStore,
+    audioPlaybackStatusStore,
+    audioPosision,
     playNextSound,
     isPendingPlayNextSound,
     playPreviousSound,
@@ -31,8 +31,8 @@ const PlayerModal = () => {
     playCurrentSound,
     setPosition,
   ] = useUnit([
-    audioPlaybackStatuslStoreUnit,
-    audioPosisionStoreUnit,
+    $audioPlaybackStatus,
+    $audioPosision,
     playNextSoundFx,
     playNextSoundFx.pending,
     playPreviousSoundFx,
@@ -42,9 +42,11 @@ const PlayerModal = () => {
     setPositionFx,
   ])
 
-  const { isPlaying, timeoutMs } = audioPlaybackStatuslStore
+  const { isPlaying, timeoutMs } = audioPlaybackStatusStore
 
   const formatedTime = formatMsToTimeString(timeoutMs)
+  const isDisabledControls =
+    isPendingPlayNextSound || isPendingPlayPreviousSound
 
   return (
     <View style={styles.container}>
@@ -53,7 +55,7 @@ const PlayerModal = () => {
         style={styles.albumCover}
       />
       <Slider
-        value={audioPosisionStore}
+        value={audioPosision}
         style={{ width: 300, height: 40 }}
         minimumValue={0}
         maximumValue={1}
@@ -66,17 +68,19 @@ const PlayerModal = () => {
       <Text>
         {formatedTime}/
         {formatMsToTimeString(
-          audioPlaybackStatuslStore.status?.durationMillis ?? 0
+          audioPlaybackStatusStore.status?.durationMillis ?? 0
         )}
       </Text>
-      <Text style={{ width: 300 }}>
-        {audioPlaybackStatuslStore.status?.uri}
-      </Text>
+      <Text style={{ width: 300 }}>{audioPlaybackStatusStore.status?.uri}</Text>
       <View style={styles.controls}>
-        <TouchableOpacity onPress={playPreviousSound}>
+        <TouchableOpacity
+          disabled={isDisabledControls}
+          onPress={playPreviousSound}
+        >
           <AntDesign name="stepbackward" size={30} color="black" />
         </TouchableOpacity>
         <TouchableOpacity
+          disabled={isDisabledControls}
           onPress={isPlaying ? pauseCurrentSound : playCurrentSound}
         >
           <FontAwesome
@@ -85,7 +89,7 @@ const PlayerModal = () => {
             color="black"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={playNextSound}>
+        <TouchableOpacity disabled={isDisabledControls} onPress={playNextSound}>
           <AntDesign name="stepforward" size={30} color="black" />
         </TouchableOpacity>
       </View>
