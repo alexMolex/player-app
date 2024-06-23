@@ -1,26 +1,52 @@
-import React, { useState } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import React from 'react'
+import { useUnit } from 'effector-react'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
+import {
+  playNextSoundFx,
+  pauseCurrentSoundFx,
+  playPreviousSoundFx,
+  playCurrentSoundFx,
+  setPositionFx,
+  setTimeInMs,
+  stopTimer,
+  $audioPlaybackStatus,
+  $audioPosision,
+} from '@/src/store/audioControllStore'
+import formatMsToTimeString from '@/src/utils/time/formatMsToTimeString'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 
 const PlayerModal = () => {
   const router = useRouter()
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [playbackProgress, setPlaybackProgress] = useState(0)
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying)
-    // Здесь должна быть логика воспроизведения или паузы музыки
-  }
+  const [
+    audioPlaybackStatusStore,
+    audioPosision,
+    playNextSound,
+    isPendingPlayNextSound,
+    playPreviousSound,
+    isPendingPlayPreviousSound,
+    pauseCurrentSound,
+    playCurrentSound,
+    setPosition,
+  ] = useUnit([
+    $audioPlaybackStatus,
+    $audioPosision,
+    playNextSoundFx,
+    playNextSoundFx.pending,
+    playPreviousSoundFx,
+    playPreviousSoundFx.pending,
+    pauseCurrentSoundFx,
+    playCurrentSoundFx,
+    setPositionFx,
+  ])
 
-  const handleNext = () => {
-    // Логика для перехода к следующему треку
-  }
+  const { isPlaying, timeoutMs } = audioPlaybackStatusStore
 
-  const handlePrevious = () => {
-    // Логика для перехода к предыдущему треку
-  }
+  const formatedTime = formatMsToTimeString(timeoutMs)
+  const isDisabledControls =
+    isPendingPlayNextSound || isPendingPlayPreviousSound
 
   return (
     <View style={styles.container}>
@@ -29,24 +55,41 @@ const PlayerModal = () => {
         style={styles.albumCover}
       />
       <Slider
-        value={playbackProgress}
-        onValueChange={setPlaybackProgress}
-        minimumTrackTintColor="#1fb28a"
-        maximumTrackTintColor="#d3d3d3"
-        thumbTintColor="#1fb28a"
+        value={audioPosision}
+        style={{ width: 300, height: 40 }}
+        minimumValue={0}
+        maximumValue={1}
+        minimumTrackTintColor="#000000"
+        maximumTrackTintColor="#000000"
+        onValueChange={setTimeInMs}
+        onSlidingComplete={setPosition}
+        onSlidingStart={() => stopTimer()}
       />
+      <Text>
+        {formatedTime}/
+        {formatMsToTimeString(
+          audioPlaybackStatusStore.status?.durationMillis ?? 0
+        )}
+      </Text>
+      <Text style={{ width: 300 }}>{audioPlaybackStatusStore.status?.uri}</Text>
       <View style={styles.controls}>
-        <TouchableOpacity onPress={handlePrevious}>
+        <TouchableOpacity
+          disabled={isDisabledControls}
+          onPress={playPreviousSound}
+        >
           <AntDesign name="stepbackward" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePlayPause}>
+        <TouchableOpacity
+          disabled={isDisabledControls}
+          onPress={isPlaying ? pauseCurrentSound : playCurrentSound}
+        >
           <FontAwesome
             name={isPlaying ? 'pause' : 'play'}
             size={30}
             color="black"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleNext}>
+        <TouchableOpacity disabled={isDisabledControls} onPress={playNextSound}>
           <AntDesign name="stepforward" size={30} color="black" />
         </TouchableOpacity>
       </View>
