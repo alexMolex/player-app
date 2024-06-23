@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { TabBarIcon } from '@/src/components/navigation/TabBarIcon'
+import { TabBarIcon } from '@/src/ui/navigation/TabBarIcon'
 import { Colors } from '@/src/constants/Colors'
 import { useColorScheme } from '@/src/hooks/useColorScheme'
 import { tabsScreenRoutes } from '@/src/routes'
-import MinimizedPlayer from '../MinimizedPlayer'
+import MinimizedPlayer from '@/src/components/MinimizedPlayer'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
