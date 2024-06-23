@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useUnit } from 'effector-react'
-import AudioListItem from '@/src/components/AudioListItem'
+import AudioListItem from '@/src/ui/AudioListItem'
 import { playSoundFx } from '@/src/store/audioControllStore'
 import { Asset } from 'expo-media-library'
 

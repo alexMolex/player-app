@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import PressableLink from '@/src/components/PressableLink'
+import PressableLink from '@/src/ui/PressableLink'
 import { rootLayoutRoutes } from '@/src/routes'
 
 const MinimizedPlayer: React.FC = () => {
