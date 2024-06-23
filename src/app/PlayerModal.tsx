@@ -14,13 +14,12 @@ import {
   audioPosisionStore as audioPosisionStoreUnit,
 } from '@/src/store/audioControllStore'
 import formatMsToTimeString from '@/src/utils/time/formatMsToTimeString'
-import useBoolean from '@/src/hooks/useBoolean'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 
 const PlayerModal = () => {
   const router = useRouter()
-  const [isSliding, setIsSliding, setNotIsSliding] = useBoolean()
+
   const [
     audioPlaybackStatuslStore,
     audioPosisionStore,
@@ -42,18 +41,10 @@ const PlayerModal = () => {
     playCurrentSoundFx,
     setPositionFx,
   ])
-  const formatedTime = formatMsToTimeString(audioPlaybackStatuslStore.timeoutMs)
-  const isPlaying = audioPlaybackStatuslStore.isRunningTimer || isSliding
 
-  const onSlidingComplete = (value: number) => {
-    setPosition(value)
-    setNotIsSliding()
-  }
+  const { isPlaying, timeoutMs } = audioPlaybackStatuslStore
 
-  const onSlidingStart = () => {
-    setIsSliding()
-    stopTimer()
-  }
+  const formatedTime = formatMsToTimeString(timeoutMs)
 
   return (
     <View style={styles.container}>
@@ -69,8 +60,8 @@ const PlayerModal = () => {
         minimumTrackTintColor="#000000"
         maximumTrackTintColor="#000000"
         onValueChange={setTimeInMs}
-        onSlidingComplete={onSlidingComplete}
-        onSlidingStart={onSlidingStart}
+        onSlidingComplete={setPosition}
+        onSlidingStart={() => stopTimer()}
       />
       <Text>
         {formatedTime}/

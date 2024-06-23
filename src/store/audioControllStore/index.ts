@@ -49,9 +49,11 @@ export const playSoundFx = createEffect(async (song: Asset) => {
 
     await sound.loadAsync({ uri: song.uri })
 
-    await sound.playAsync()
+    if (audioPlaybackStatuslStore.getState().isPlaying) {
+      await sound.playAsync()
 
-    runTimer()
+      runTimer()
+    }
   } catch (error) {
     throw error
   }
@@ -96,12 +98,14 @@ export const playPreviousSoundFx = createEffect(async () => {
 })
 
 export const pauseCurrentSoundFx = createEffect(async () => {
+  setIsPlaying(false)
   stopTimer()
 
   return audioSoundStore.getState().sound.pauseAsync()
 })
 
 export const playCurrentSoundFx = createEffect(async () => {
+  setIsPlaying(true)
   runTimer()
 
   return audioSoundStore.getState().sound.playAsync()
@@ -127,10 +131,12 @@ const runTimer = createEvent()
 const resetTimer = createEvent()
 export const stopTimer = createEvent()
 export const setTimeInMs = createEvent<number>()
+export const setIsPlaying = createEvent<boolean>()
 
 export const audioPlaybackStatuslStore = createStore<TAudioPlaybackStatus>({
   status: undefined,
   timeoutMs: 0,
+  isPlaying: true,
   isRunningTimer: false,
   timerId: null,
 })
@@ -139,6 +145,12 @@ export const audioPlaybackStatuslStore = createStore<TAudioPlaybackStatus>({
       ...state,
       status,
       timeoutMs: status.positionMillis ?? state.timeoutMs,
+    }
+  })
+  .on(setIsPlaying, (state, isPlaying) => {
+    return {
+      ...state,
+      isPlaying,
     }
   })
   .on(setTimeInMs, (state, value) => {
@@ -151,6 +163,10 @@ export const audioPlaybackStatuslStore = createStore<TAudioPlaybackStatus>({
     return { ...state, timeoutMs }
   })
   .on(runTimer, (state) => {
+    if (!state.isPlaying) {
+      return state
+    }
+
     if (!state.isRunningTimer) {
       const timerId = setInterval(runTimer, msPerSecond)
 
