@@ -1,5 +1,5 @@
 import { sample, createEvent, createStore, createEffect } from 'effector'
-import { Audio } from 'expo-av'
+import { Audio, InterruptionModeAndroid } from 'expo-av'
 import type { AVPlaybackStatusSuccess } from 'expo-av'
 import { Asset } from 'expo-media-library'
 import { msPerSecond } from '@/src/utils/time/constants'
@@ -29,7 +29,7 @@ const getAssetPosition = () => {
   }
 }
 
-export const playSoundFx = createEffect(async (song: Asset) => {
+const prepareSoundFx = createEffect(async (asset: Asset) => {
   const sound = new Audio.Sound()
 
   sound.setOnPlaybackStatusUpdate((status) => {
@@ -42,18 +42,12 @@ export const playSoundFx = createEffect(async (song: Asset) => {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       playsInSilentModeIOS: true,
-      shouldDuckAndroid: true,
       staysActiveInBackground: true,
       playThroughEarpieceAndroid: false,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
     })
 
-    await sound.loadAsync({ uri: song.uri })
-
-    if ($audioPlaybackStatus.getState().isPlaying) {
-      await sound.playAsync()
-
-      runTimer()
-    }
+    await sound.loadAsync({ uri: asset.uri })
   } catch (error) {
     throw error
   }
@@ -61,13 +55,38 @@ export const playSoundFx = createEffect(async (song: Asset) => {
   return sound
 })
 
+export const playSoundFx = createEffect(async (asset: Asset) => {
+  try {
+    const sound = await prepareSoundFx(asset)
+
+    await sound.playAsync()
+    resetTimer()
+    setIsPlaying(true)
+    runTimer()
+  } catch (error) {
+    throw error
+  }
+})
+
+const playSoundWhenIsPlayingFx = createEffect(async (asset: Asset) => {
+  try {
+    const sound = await prepareSoundFx(asset)
+
+    if ($audioPlaybackStatus.getState().isPlaying) {
+      await sound.playAsync()
+      resetTimer()
+      runTimer()
+    }
+  } catch (error) {
+    throw error
+  }
+})
+
 export const playNextSoundFx = createEffect(async () => {
   const { isFoundAsset, nextAsset, isLastAsset } = getAssetPosition()
 
-  resetTimer()
-
   if (isFoundAsset && !isLastAsset) {
-    return playSoundFx(nextAsset)
+    return playSoundWhenIsPlayingFx(nextAsset)
   }
 
   if (!isFoundAsset) {
@@ -82,10 +101,8 @@ export const playNextSoundFx = createEffect(async () => {
 export const playPreviousSoundFx = createEffect(async () => {
   const { isFoundAsset, previousAsset, isFirstAsset } = getAssetPosition()
 
-  resetTimer()
-
   if (isFoundAsset && !isFirstAsset) {
-    return playSoundFx(previousAsset)
+    return playSoundWhenIsPlayingFx(previousAsset)
   }
 
   if (!isFoundAsset) {
@@ -226,10 +243,10 @@ export const $audioQueue = createStore<TAudioQueue>({
     return { ...state, isRandomMode: !state.isRandomMode }
   })
 
-playSoundFx.watch(setCurrentAsset)
+prepareSoundFx.watch(setCurrentAsset)
 
 sample({
-  clock: playSoundFx.done,
+  clock: prepareSoundFx.done,
   target: $audioSound,
   fn: ({ result: sound }) => {
     return { sound }
@@ -237,7 +254,7 @@ sample({
 })
 
 sample({
-  clock: playSoundFx.done,
+  clock: prepareSoundFx.done,
   filter: () => {
     return $audioQueue.getState().isRandomMode
   },
@@ -247,6 +264,6 @@ sample({
 })
 
 sample({
-  clock: playSoundFx.failData,
+  clock: prepareSoundFx.failData,
   target: showErrorNotificationFx,
 })
