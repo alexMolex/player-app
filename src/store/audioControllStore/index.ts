@@ -61,8 +61,7 @@ export const playSoundFx = createEffect(async (asset: Asset) => {
 
     await sound.playAsync()
     resetTimer()
-    setIsPlaying(true)
-    runTimer()
+    runTimerAndPlay()
   } catch (error) {
     throw error
   }
@@ -75,7 +74,7 @@ const playSoundWhenIsPlayingFx = createEffect(async (asset: Asset) => {
     if ($audioPlaybackStatus.getState().isPlaying) {
       await sound.playAsync()
       resetTimer()
-      runTimer()
+      runTimerWhenIsPlaying()
     }
   } catch (error) {
     throw error
@@ -122,8 +121,7 @@ export const pauseCurrentSoundFx = createEffect(async () => {
 })
 
 export const playCurrentSoundFx = createEffect(async () => {
-  setIsPlaying(true)
-  runTimer()
+  runTimerAndPlay()
 
   return $audioSound.getState().sound.playAsync()
 })
@@ -132,7 +130,7 @@ export const setPositionFx = createEffect(async (positionMillis: number) => {
   const durationMillis = $audioPlaybackStatus.getState().status?.durationMillis
 
   if (durationMillis) {
-    runTimer()
+    runTimerWhenIsPlaying()
 
     return $audioSound
       .getState()
@@ -143,11 +141,16 @@ export const setPositionFx = createEffect(async (positionMillis: number) => {
 })
 
 const updateonPlaybackStatust = createEvent<AVPlaybackStatusSuccess>()
-const runTimer = createEvent()
+const runTimerWhenIsPlaying = createEvent()
 const resetTimer = createEvent()
 export const stopTimer = createEvent()
 export const setTimeInMs = createEvent<number>()
 export const setIsPlaying = createEvent<boolean>()
+
+const runTimerAndPlay = () => {
+  setIsPlaying(true)
+  runTimerWhenIsPlaying()
+}
 
 export const $audioPlaybackStatus = createStore<TAudioPlaybackStatus>({
   status: undefined,
@@ -178,13 +181,13 @@ export const $audioPlaybackStatus = createStore<TAudioPlaybackStatus>({
 
     return { ...state, timeoutMs }
   })
-  .on(runTimer, (state) => {
+  .on(runTimerWhenIsPlaying, (state) => {
     if (!state.isPlaying) {
       return state
     }
 
     if (!state.isRunningTimer) {
-      const timerId = setInterval(runTimer, msPerSecond)
+      const timerId = setInterval(runTimerWhenIsPlaying, msPerSecond)
 
       return { ...state, timerId, isRunningTimer: true }
     }
