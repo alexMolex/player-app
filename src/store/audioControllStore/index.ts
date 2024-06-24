@@ -114,16 +114,20 @@ export const playPreviousSoundFx = createEffect(async () => {
 })
 
 export const pauseCurrentSoundFx = createEffect(async () => {
-  setIsPlaying(false)
-  stopTimer()
-
   return $audioSound.getState().sound.pauseAsync()
 })
 
-export const playCurrentSoundFx = createEffect(async () => {
-  runTimerAndPlay()
+pauseCurrentSoundFx.done.watch(() => {
+  setIsPlaying(false)
+  stopTimer()
+})
 
+export const playCurrentSoundFx = createEffect(async () => {
   return $audioSound.getState().sound.playAsync()
+})
+
+playCurrentSoundFx.done.watch(() => {
+  runTimerAndPlay()
 })
 
 export const setPositionFx = createEffect(async (positionMillis: number) => {
