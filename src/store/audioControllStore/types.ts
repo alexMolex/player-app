@@ -15,7 +15,7 @@ export type TAudioPlaybackStatus = {
 }
 
 export type TAudioQueue = {
-  randomQueue: Asset[]
+  queue: Asset[]
   currentAsset: null | Asset
   isRandomMode: boolean
 }

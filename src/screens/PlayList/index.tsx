@@ -1,15 +1,21 @@
 import { FlatList, Text } from 'react-native'
 import React from 'react'
 import { useUnit } from 'effector-react'
-import { useLocalSearchParams } from 'expo-router'
-import { deviceAudioAlbumsCollection } from '@/src/store/audioAssetsStore'
+import {
+  $deviceAudioAlbumsCollection,
+  $audioAssets,
+} from '@/src/store/audioAssetsStore'
 import AudioItem from './AudioItem'
 
 const PlayList = () => {
-  const [deviceAudioAlbums] = useUnit([deviceAudioAlbumsCollection])
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const [
+    deviceAudioAlbums,
+    {
+      currentAlbum: { albumId },
+    },
+  ] = useUnit([$deviceAudioAlbumsCollection, $audioAssets])
 
-  const isExistAlbum = id && deviceAudioAlbums[id]
+  const isExistAlbum = albumId && deviceAudioAlbums[albumId]
 
   if (!isExistAlbum) {
     return <Text>Нет доступных альбомов</Text>
@@ -17,7 +23,7 @@ const PlayList = () => {
 
   return (
     <FlatList
-      data={deviceAudioAlbums[id].list}
+      data={deviceAudioAlbums[albumId].list}
       keyExtractor={({ id }) => id}
       renderItem={({ item }) => <AudioItem song={item} />}
     />

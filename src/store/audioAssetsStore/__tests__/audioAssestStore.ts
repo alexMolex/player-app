@@ -1,5 +1,5 @@
 import $audioAssets, {
-  deviceAudioAlbumsCollection,
+  $deviceAudioAlbumsCollection,
   saveAudioAssets,
   setCurrentAlbum,
 } from '..'
@@ -11,23 +11,27 @@ describe('$audioAssets', () => {
 
     expect($audioAssets.getState()).toEqual({
       assets: audioAssetsMock.assets,
-      currentAlbum: [],
+      currentAlbum: { albumId: '', name: '', assets: [] },
     })
   })
 
   it('should get albums in audioAssetsAlbum', () => {
     saveAudioAssets(audioAssetsMock.assets)
 
-    expect(deviceAudioAlbumsCollection.getState()).toEqual(albumsMock)
+    expect($deviceAudioAlbumsCollection.getState()).toEqual(albumsMock)
   })
 
   it('should set current album when call event', () => {
-    expect($audioAssets.getState().currentAlbum).toEqual([])
+    expect($audioAssets.getState().currentAlbum).toEqual({
+      albumId: '',
+      name: '',
+      assets: [],
+    })
 
     const album = [audioAssetsMock.assets[0]]
 
-    setCurrentAlbum(album)
+    setCurrentAlbum({ albumId: '', name: '', assets: album })
 
-    expect($audioAssets.getState().currentAlbum).toEqual(album)
+    expect($audioAssets.getState().currentAlbum.assets).toEqual(album)
   })
 })

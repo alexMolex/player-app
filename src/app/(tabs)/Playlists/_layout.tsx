@@ -1,13 +1,13 @@
 import { Stack } from 'expo-router'
-import { useGlobalSearchParams } from 'expo-router'
 import { tabsScreenRoutes } from '@/src/routes'
+import { $audioAssets } from '@/src/store/audioAssetsStore'
+
+import { useUnit } from 'effector-react'
 
 const playlistsChildrenRoutes = tabsScreenRoutes.playlists.children
 
 const PlaylistsScreenLayout = () => {
-  const { playlistTitle } = useGlobalSearchParams<{
-    playlistTitle?: string
-  }>()
+  const { currentAlbum } = useUnit($audioAssets)
 
   return (
     <Stack>
@@ -20,7 +20,7 @@ const PlaylistsScreenLayout = () => {
       <Stack.Screen
         name={playlistsChildrenRoutes['[id]'].name}
         options={{
-          headerTitle: playlistTitle,
+          headerTitle: currentAlbum.name,
           headerBackVisible: true,
         }}
       />

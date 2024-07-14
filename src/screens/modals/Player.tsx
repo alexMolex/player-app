@@ -9,11 +9,15 @@ import {
   playCurrentSoundFx,
   setPositionFx,
   setTimeInMs,
+  toggleRandomMode,
   stopTimer,
   $audioPlaybackStatus,
   $audioPosision,
+  $audioQueue,
 } from '@/src/store/audioControllStore'
 import formatMsToTimeString from '@/src/utils/time/formatMsToTimeString'
+import Foundation from '@expo/vector-icons/Foundation'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 
@@ -21,6 +25,7 @@ const PlayerModal = () => {
   const router = useRouter()
 
   const [
+    audioQueue,
     audioPlaybackStatusStore,
     audioPosision,
     playNextSound,
@@ -31,6 +36,7 @@ const PlayerModal = () => {
     playCurrentSound,
     setPosition,
   ] = useUnit([
+    $audioQueue,
     $audioPlaybackStatus,
     $audioPosision,
     playNextSoundFx,
@@ -92,6 +98,21 @@ const PlayerModal = () => {
         <TouchableOpacity disabled={isDisabledControls} onPress={playNextSound}>
           <AntDesign name="stepforward" size={30} color="black" />
         </TouchableOpacity>
+        {audioQueue.isRandomMode ? (
+          <TouchableOpacity
+            disabled={isDisabledControls}
+            onPress={() => toggleRandomMode()}
+          >
+            <MaterialIcons name="shuffle-on" size={30} color="black" />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            disabled={isDisabledControls}
+            onPress={() => toggleRandomMode()}
+          >
+            <Foundation name="shuffle" size={30} color="black" />
+          </TouchableOpacity>
+        )}
       </View>
       <TouchableOpacity style={styles.closeButton} onPress={router.back}>
         <AntDesign name="close" size={30} color="black" />

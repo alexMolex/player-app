@@ -6,19 +6,19 @@ import { msPerSecond } from '@/src/utils/time/constants'
 import { showErrorNotificationFx } from '../notification'
 import type { TAudioControl, TAudioQueue, TAudioPlaybackStatus } from './types'
 import $audioAssets from '../audioAssetsStore'
+import shuffleArrayExceptFirst from '@/src/utils/array/shuffleArrayExceptFirst'
 
 const getAssetPosition = () => {
-  const currentAsset = $audioQueue.getState().currentAsset
-  const currentAlbum = $audioAssets.getState().currentAlbum
+  const { currentAsset, queue } = $audioQueue.getState()
 
   const currentAssetIndex =
-    currentAsset !== null ? currentAlbum.indexOf(currentAsset) : -1
+    currentAsset !== null ? queue.indexOf(currentAsset) : -1
 
   const isFoundAsset = currentAssetIndex !== -1
-  const isLastAsset = currentAssetIndex === currentAlbum.length - 1
+  const isLastAsset = currentAssetIndex === queue.length - 1
   const isFirstAsset = currentAssetIndex === 0
-  const nextAsset = currentAlbum[currentAssetIndex + 1]
-  const previousAsset = currentAlbum[currentAssetIndex - 1]
+  const nextAsset = queue[currentAssetIndex + 1]
+  const previousAsset = queue[currentAssetIndex - 1]
 
   return {
     isFoundAsset,
@@ -227,7 +227,7 @@ export const $audioPosision = $audioPlaybackStatus.map((state) => {
   return audioPosition
 })
 
-const addAudioToQueue = createEvent<Asset>()
+const setQueue = createEvent<Asset[]>()
 const setCurrentAsset = createEvent<Asset>()
 export const toggleRandomMode = createEvent()
 
@@ -236,12 +236,12 @@ export const $audioSound = createStore<TAudioControl>({
 })
 
 export const $audioQueue = createStore<TAudioQueue>({
-  randomQueue: [],
+  queue: [],
   currentAsset: null,
   isRandomMode: false,
 })
-  .on(addAudioToQueue, (state, asset) => {
-    return { ...state, randomQueue: [...state.randomQueue, asset] }
+  .on(setQueue, (state, assets) => {
+    return { ...state, queue: assets }
   })
   .on(setCurrentAsset, (state, asset) => {
     return { ...state, currentAsset: asset }
@@ -250,6 +250,20 @@ export const $audioQueue = createStore<TAudioQueue>({
     return { ...state, isRandomMode: !state.isRandomMode }
   })
 
+const setCurrentQueue = () => {
+  const { currentAsset, isRandomMode } = $audioQueue.getState()
+  const assets = $audioAssets.getState().currentAlbum.assets
+
+  if (isRandomMode && currentAsset !== null) {
+    setQueue(shuffleArrayExceptFirst(currentAsset, assets))
+  } else {
+    setQueue(assets)
+  }
+}
+
+playSoundFx.done.watch(setCurrentQueue)
+toggleRandomMode.watch(setCurrentQueue)
+
 prepareSoundFx.watch(setCurrentAsset)
 
 sample({
@@ -257,16 +271,6 @@ sample({
   target: $audioSound,
   fn: ({ result: sound }) => {
     return { sound }
-  },
-})
-
-sample({
-  clock: prepareSoundFx.done,
-  filter: () => {
-    return $audioQueue.getState().isRandomMode
-  },
-  fn: ({ params }) => {
-    addAudioToQueue(params)
   },
 })
 
