@@ -1,20 +1,19 @@
 import shuffleArray from './shuffleArray'
 
-const shuffleArrayExceptFirst = <T>(firstAsset: T, assets: T[]): T[] => {
-  const assetsCopy = [...assets]
-  const firstAssetIndex = assetsCopy.indexOf(firstAsset)
+const shuffleArrayExceptFirst = <T>(firstElem: T, list: T[]): T[] => {
+  const firstElemIndex = list.indexOf(firstElem)
 
-  if (firstAssetIndex === -1) {
-    return assetsCopy
+  if (firstElemIndex === -1) {
+    return shuffleArray(list)
   }
 
-  assetsCopy.splice(firstAssetIndex, 1)
+  const listCopy = [...list]
 
-  const shuffledArray = shuffleArray(assetsCopy)
+  listCopy.splice(firstElemIndex, 1)
 
-  shuffledArray.unshift(firstAsset)
+  const shuffledArray = shuffleArray(listCopy)
 
-  return shuffledArray
+  return [firstElem, ...shuffledArray]
 }
 
 export default shuffleArrayExceptFirst

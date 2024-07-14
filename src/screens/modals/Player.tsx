@@ -8,18 +8,17 @@ import {
   playPreviousSoundFx,
   playCurrentSoundFx,
   setPositionFx,
-  setTimeInMs,
-  toggleRandomMode,
+  setTime,
   stopTimer,
   $audioPlaybackStatus,
   $audioPosision,
-  $audioQueue,
 } from '@/src/store/audioControllStore'
 import formatMsToTimeString from '@/src/utils/time/formatMsToTimeString'
 import Foundation from '@expo/vector-icons/Foundation'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
+import { $audioQueue, toggleRandomMode } from '@/src/store/audioQueueStore'
 
 const PlayerModal = () => {
   const router = useRouter()
@@ -67,7 +66,7 @@ const PlayerModal = () => {
         maximumValue={1}
         minimumTrackTintColor="#000000"
         maximumTrackTintColor="#000000"
-        onValueChange={setTimeInMs}
+        onValueChange={setTime}
         onSlidingComplete={setPosition}
         onSlidingStart={() => stopTimer()}
       />
