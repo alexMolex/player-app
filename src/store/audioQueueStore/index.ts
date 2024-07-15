@@ -2,10 +2,11 @@ import { createEvent, createStore } from 'effector'
 import { Asset } from 'expo-media-library'
 import shuffleArrayExceptFirst from '@/src/utils/array/shuffleArrayExceptFirst'
 import $audioAssets from '../audioAssetsStore'
-import { TAudioQueue } from './types'
+import { TAudioQueue, TRepeatMode } from './types'
 
 const setQueue = createEvent<Asset[]>()
 export const setCurrentAsset = createEvent<Asset>()
+export const setRepeatMode = createEvent<TRepeatMode>()
 export const toggleRandomMode = createEvent()
 
 export const setCurrentQueue = () => {
@@ -44,6 +45,7 @@ export const $audioQueue = createStore<TAudioQueue>({
   queue: [],
   currentAsset: null,
   isRandomMode: false,
+  repeatMode: 'none',
 })
   .on(setQueue, (state, assets) => {
     return { ...state, queue: assets }
@@ -53,6 +55,9 @@ export const $audioQueue = createStore<TAudioQueue>({
   })
   .on(toggleRandomMode, (state) => {
     return { ...state, isRandomMode: !state.isRandomMode }
+  })
+  .on(setRepeatMode, (state, repeatMode) => {
+    return { ...state, repeatMode }
   })
 
 toggleRandomMode.watch(setCurrentQueue)

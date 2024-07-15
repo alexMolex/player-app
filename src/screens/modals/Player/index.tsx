@@ -1,57 +1,46 @@
 import React from 'react'
 import { useUnit } from 'effector-react'
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import {
   playNextSoundFx,
   pauseCurrentSoundFx,
   playPreviousSoundFx,
   playCurrentSoundFx,
-  setPositionFx,
-  setTime,
-  stopTimer,
-  $audioPlaybackStatus,
-  $audioPosision,
+  $isPlaying,
 } from '@/src/store/audioControllStore'
-import formatMsToTimeString from '@/src/utils/time/formatMsToTimeString'
-import Foundation from '@expo/vector-icons/Foundation'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { $audioQueue } from '@/src/store/audioQueueStore'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
-import Slider from '@react-native-community/slider'
-import { $audioQueue, toggleRandomMode } from '@/src/store/audioQueueStore'
+import RepeatMode from './RepeatMode'
+import RandomMode from './RandomMode'
+import PlaySlider from './PlaySlider'
 
 const PlayerModal = () => {
   const router = useRouter()
 
   const [
-    audioQueue,
-    audioPlaybackStatusStore,
-    audioPosision,
+    isPlaying,
+    audioQueueStore,
     playNextSound,
     isPendingPlayNextSound,
     playPreviousSound,
     isPendingPlayPreviousSound,
     pauseCurrentSound,
     playCurrentSound,
-    setPosition,
   ] = useUnit([
+    $isPlaying,
     $audioQueue,
-    $audioPlaybackStatus,
-    $audioPosision,
     playNextSoundFx,
     playNextSoundFx.pending,
     playPreviousSoundFx,
     playPreviousSoundFx.pending,
     pauseCurrentSoundFx,
     playCurrentSoundFx,
-    setPositionFx,
   ])
 
-  const { isPlaying, timeoutMs } = audioPlaybackStatusStore
-
-  const formatedTime = formatMsToTimeString(timeoutMs)
   const isDisabledControls =
     isPendingPlayNextSound || isPendingPlayPreviousSound
+  const currentAsset = audioQueueStore.currentAsset
 
   return (
     <View style={styles.container}>
@@ -59,25 +48,12 @@ const PlayerModal = () => {
         source={require('@/src/assets/images/partial-react-logo.png')}
         style={styles.albumCover}
       />
-      <Slider
-        value={audioPosision}
-        style={{ width: 300, height: 40 }}
-        minimumValue={0}
-        maximumValue={1}
-        minimumTrackTintColor="#000000"
-        maximumTrackTintColor="#000000"
-        onValueChange={setTime}
-        onSlidingComplete={setPosition}
-        onSlidingStart={() => stopTimer()}
-      />
-      <Text>
-        {formatedTime}/
-        {formatMsToTimeString(
-          audioPlaybackStatusStore.status?.durationMillis ?? 0
-        )}
-      </Text>
-      <Text style={{ width: 300 }}>{audioPlaybackStatusStore.status?.uri}</Text>
+      <PlaySlider />
+      {currentAsset && (
+        <Text style={{ width: 300 }}>{currentAsset.filename}</Text>
+      )}
       <View style={styles.controls}>
+        <RepeatMode />
         <TouchableOpacity
           disabled={isDisabledControls}
           onPress={playPreviousSound}
@@ -97,21 +73,7 @@ const PlayerModal = () => {
         <TouchableOpacity disabled={isDisabledControls} onPress={playNextSound}>
           <AntDesign name="stepforward" size={30} color="black" />
         </TouchableOpacity>
-        {audioQueue.isRandomMode ? (
-          <TouchableOpacity
-            disabled={isDisabledControls}
-            onPress={() => toggleRandomMode()}
-          >
-            <MaterialIcons name="shuffle-on" size={30} color="black" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            disabled={isDisabledControls}
-            onPress={() => toggleRandomMode()}
-          >
-            <Foundation name="shuffle" size={30} color="black" />
-          </TouchableOpacity>
-        )}
+        <RandomMode />
       </View>
       <TouchableOpacity style={styles.closeButton} onPress={router.back}>
         <AntDesign name="close" size={30} color="black" />

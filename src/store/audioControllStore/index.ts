@@ -4,7 +4,12 @@ import { Asset } from 'expo-media-library'
 import { msPerSecond } from '@/src/utils/time/constants'
 import type { TAudioPlaybackStatus } from './types'
 import { $audioSound, prepareSoundFx } from '../audioSoundStore'
-import { getAssetPosition, setCurrentQueue } from '../audioQueueStore'
+import {
+  $audioQueue,
+  getAssetPosition,
+  setCurrentQueue,
+  setRepeatMode,
+} from '../audioQueueStore'
 import { Audio } from 'expo-av'
 
 const subscribeOnUpdateStatus = (sound: Audio.Sound) => {
@@ -73,6 +78,17 @@ export const playPreviousSoundFx = createEffect(async () => {
   throw new Error(
     'The previous sound cannot be played because it is the first asset'
   )
+})
+
+const repeatSoundFx = createEffect(async () => {
+  try {
+    await $audioSound.getState().sound.replayAsync()
+
+    resetTimer()
+    runTimerAndPlay()
+  } catch (error) {
+    throw error
+  }
 })
 
 export const pauseCurrentSoundFx = createEffect(async () => {
@@ -174,6 +190,10 @@ export const $audioPosision = $audioPlaybackStatus.map((state) => {
   return audioPosition
 })
 
+export const $isPlaying = $audioPlaybackStatus.map((state) => {
+  return state.isPlaying
+})
+
 pauseCurrentSoundFx.done.watch(() => {
   setIsPlaying(false)
   stopTimer()
@@ -186,7 +206,23 @@ playCurrentSoundFx.done.watch(() => {
 playSoundFx.done.watch(setCurrentQueue)
 
 $audioPlaybackStatus.watch(({ status, timeoutMs }) => {
-  if (status?.durationMillis && status.durationMillis <= timeoutMs) {
-    playNextSoundFx()
+  const repeatMode = $audioQueue.getState().repeatMode
+  const isEndOfSound =
+    status?.durationMillis && status.durationMillis <= timeoutMs
+
+  if (!isEndOfSound) {
+    return
   }
+
+  if (repeatMode === 'every') {
+    return repeatSoundFx()
+  }
+
+  if (repeatMode === 'once') {
+    repeatSoundFx()
+
+    return setRepeatMode('none')
+  }
+
+  return playNextSoundFx()
 })
