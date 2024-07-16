@@ -4,6 +4,7 @@ import { TabBarIcon } from '@/src/ui/navigation/TabBarIcon'
 import { Colors } from '@/src/constants/Colors'
 import { useColorScheme } from '@/src/hooks/useColorScheme'
 import { tabsScreenRoutes } from '@/src/routes'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import MinimizedPlayer from '@/src/components/MinimizedPlayer'
 
 export default function TabLayout() {
@@ -15,7 +16,7 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: Colors[colorScheme ?? 'dark'].tint,
           headerShown: false,
         }}
       >
@@ -25,7 +26,7 @@ export default function TabLayout() {
             title: 'favourite',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                name={focused ? 'heart' : 'heart-outline'}
+                name={focused ? 'musical-notes-outline' : 'musical-notes'}
                 color={color}
               />
             ),
@@ -35,7 +36,15 @@ export default function TabLayout() {
           name={tabsScreenRoutes.playlists.name}
           options={{
             title: 'Playlists',
-            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+            tabBarIcon: ({ color }) => {
+              return (
+                <MaterialCommunityIcons
+                  name="playlist-music"
+                  size={40}
+                  color={color}
+                />
+              )
+            },
           }}
         />
         <Tabs.Screen
