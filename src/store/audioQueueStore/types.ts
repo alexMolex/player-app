@@ -8,3 +8,5 @@ export type TAudioQueue = {
   isRandomMode: boolean
   repeatMode: TRepeatMode
 }
+
+export type TAudioQueueStorage = Omit<TAudioQueue, 'queue' | 'currentAsset'>

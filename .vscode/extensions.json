@@ -2,6 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint", 
         "eamodio.gitlens", 
+        "eprincev-egor.toggle-upper-case",
         "esbenp.prettier-vscode",
         "codeium.codeium"
     ]
