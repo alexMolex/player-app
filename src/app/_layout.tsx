@@ -3,11 +3,13 @@ import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { rootLayoutRoutes } from '@/src/routes'
 import useRequestAudioFiles from '@/src/store/audioAssetsStore/hooks/useRequestAudioFiles'
-import useSyncStoreWithStorage from '@/src/store/audioQueueStore/hooks/useSyncStoreWithStorage'
+import { default as useSyncStoreWithStorageAudioQueue } from '@/src/store/audioQueueStore/hooks/useSyncStoreWithStorage'
+import { default as useSyncStoreWithStoragePlayLists } from '@/src/store/playlistsStore/hooks/useSyncStoreWithStorage'
 
 const App = () => {
   useRequestAudioFiles()
-  useSyncStoreWithStorage()
+  useSyncStoreWithStorageAudioQueue()
+  useSyncStoreWithStoragePlayLists()
 
   return (
     <SafeAreaProvider>

@@ -28,6 +28,7 @@ export const $deviceAudioAlbumsCollection = $audioAssets.map(({ assets }) => {
       } else {
         assetCollection[albumId] = {
           name: getAlbumNameFromAsset(asset),
+          isHandleAdded: false,
           list: [asset],
         }
       }

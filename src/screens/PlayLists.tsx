@@ -4,21 +4,21 @@ import { useUnit } from 'effector-react'
 import PlaylistItem from '@/src/ui/PlaylistItem'
 import PressableLink from '@/src/ui/PressableLink'
 import { tabsScreenRoutes } from '@/src/routes'
-import { $deviceAudioAlbumsCollection } from '@/src/store/audioAssetsStore'
 import { setCurrentAlbum } from '@/src/store/audioAssetsStore'
+import { $combinedPlaylists } from '@/src/store/playlistsStore'
 
 const PlayLists = () => {
-  const [deviceAudioAlbums] = useUnit([$deviceAudioAlbumsCollection])
+  const combinedPlaylists = useUnit($combinedPlaylists)
 
-  const deviceAudioAlbumsList = Object.entries(deviceAudioAlbums)
+  const combinedPlaylistsEntries = Object.entries(combinedPlaylists)
 
-  if (deviceAudioAlbumsList.length === 0) {
+  if (combinedPlaylistsEntries.length === 0) {
     return <Text>Нет доступных альбомов</Text>
   }
 
   return (
     <FlatList
-      data={deviceAudioAlbumsList}
+      data={combinedPlaylistsEntries}
       keyExtractor={(item) => item[0]}
       renderItem={({ item }) => {
         const [albumId, album] = item

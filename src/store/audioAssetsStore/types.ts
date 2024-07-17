@@ -9,4 +9,8 @@ export type TAudioAssets = {
   assets: Asset[]
   currentAlbum: TCurrentAlbun
 }
-export type TAlbums = Record<string, { name: string; list: Asset[] }>
+
+export type TAlbums = Record<
+  string,
+  { name: string; isHandleAdded: boolean; list: Asset[] }
+>

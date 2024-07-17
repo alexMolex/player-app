@@ -1,21 +1,19 @@
 import { FlatList, Text } from 'react-native'
 import React from 'react'
 import { useUnit } from 'effector-react'
-import {
-  $deviceAudioAlbumsCollection,
-  $audioAssets,
-} from '@/src/store/audioAssetsStore'
+import { $audioAssets } from '@/src/store/audioAssetsStore'
+import { $combinedPlaylists } from '@/src/store/playlistsStore'
 import AudioItem from './AudioItem'
 
 const PlayList = () => {
   const [
-    deviceAudioAlbums,
+    combinedPlaylists,
     {
       currentAlbum: { albumId },
     },
-  ] = useUnit([$deviceAudioAlbumsCollection, $audioAssets])
+  ] = useUnit([$combinedPlaylists, $audioAssets])
 
-  const isExistAlbum = albumId && deviceAudioAlbums[albumId]
+  const isExistAlbum = albumId && combinedPlaylists[albumId]
 
   if (!isExistAlbum) {
     return <Text>Нет доступных альбомов</Text>
@@ -23,7 +21,7 @@ const PlayList = () => {
 
   return (
     <FlatList
-      data={deviceAudioAlbums[albumId].list}
+      data={combinedPlaylists[albumId].list}
       keyExtractor={({ id }) => id}
       renderItem={({ item }) => <AudioItem song={item} />}
     />

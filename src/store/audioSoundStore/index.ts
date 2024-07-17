@@ -1,9 +1,9 @@
 import { createEffect, createStore, sample } from 'effector'
-import { TAudioControl } from './types'
 import { Audio, InterruptionModeAndroid } from 'expo-av'
 import { Asset } from 'expo-media-library'
 import { showErrorNotificationFx } from '../notification'
 import { setCurrentAsset } from '../audioQueueStore'
+import { TAudioControl } from './types'
 
 export const prepareSoundFx = createEffect(async (asset: Asset) => {
   const sound = new Audio.Sound()

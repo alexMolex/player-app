@@ -7,7 +7,7 @@ const useRequestAudioFiles = () => {
     granularPermissions: ['audio'],
   })
 
-  async function getAlbums() {
+  const getAlbums = async () => {
     if (permissionResponse?.status !== 'granted') {
       await requestPermission()
     }
