@@ -1,6 +1,13 @@
 import { combine, createEvent, createStore } from 'effector'
 import type { Asset } from 'expo-media-library'
-import type { TAudioAssets, TAlbums, TCurrentAlbun } from './types'
+import type {
+  TAudioAssets,
+  TAlbums,
+  TCurrentAlbun,
+  TAddTrackToPlaylist,
+  TRemoveTrackFromPlaylist,
+  TAddPlaylist,
+} from './types'
 import { getAlbumNameFromAsset } from './utils'
 
 export const saveAudioAssets = createEvent<Asset[]>()
@@ -41,11 +48,10 @@ export const $deviceAudioAlbumsCollection = $audioAssets.map(({ assets }) => {
   return audioAlbumsCollection
 })
 
-export const addPlaylist = createEvent<{ name: string; assets?: Asset[] }>()
-export const addTrackToPlaylist = createEvent<{
-  playlistName: string
-  asset: Asset
-}>()
+export const addTrackToPlaylist = createEvent<TAddTrackToPlaylist>()
+export const addPlaylist = createEvent<TAddPlaylist>()
+export const removePlaylist = createEvent<string>()
+export const removeTrackFromPlaylist = createEvent<TRemoveTrackFromPlaylist>()
 export const initStoreFromStorage = createEvent<TAlbums>()
 
 export const PLAY_LIST_STORE_NAME = 'PLAY_LIST_STORE'
@@ -58,6 +64,28 @@ export const $playlists = createStore<TAlbums>(
 )
   .on(initStoreFromStorage, (_, storageState) => {
     return storageState
+  })
+  .on(removePlaylist, (state, playlistName) => {
+    const newState = { ...state }
+
+    delete newState[playlistName]
+
+    return newState
+  })
+  .on(removeTrackFromPlaylist, (state, { playlistName, trackId }) => {
+    if (playlistName in state) {
+      const playlist = state[playlistName]
+
+      return {
+        ...state,
+        [playlistName]: {
+          ...playlist,
+          list: playlist.list.filter((asset) => asset.id !== trackId),
+        },
+      }
+    }
+
+    return state
   })
   .on(addPlaylist, (state, { name, assets }) => {
     return {
