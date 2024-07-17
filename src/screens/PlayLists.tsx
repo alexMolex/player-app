@@ -5,8 +5,8 @@ import PlaylistItem from '@/src/ui/PlaylistItem'
 import PressableLink from '@/src/ui/PressableLink'
 import { tabsScreenRoutes } from '@/src/routes'
 import {
-  setCurrentAlbum,
   $combinedPlaylists,
+  setCurrentPlaylist,
 } from '@/src/store/audioPlaylistsStore'
 
 const PlayLists = () => {
@@ -28,13 +28,14 @@ const PlayLists = () => {
           <PressableLink
             pathname={tabsScreenRoutes.playlists.children['[id]'].pathName}
             params={{ id: albumId, playlistTitle: album.name }}
-            onPress={() =>
-              setCurrentAlbum({
+            onPress={() => {
+              console.log('🚀 ~ PlayLists ~ albumId:', albumId)
+              setCurrentPlaylist({
                 albumId: albumId,
                 name: album.name,
                 assets: album.list,
               })
-            }
+            }}
           >
             <PlaylistItem
               cover={require('@/src/assets/images/react-logo.png')}

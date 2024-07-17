@@ -1,13 +1,12 @@
+import { useUnit } from 'effector-react'
 import { Stack } from 'expo-router'
 import { tabsScreenRoutes } from '@/src/routes'
-import { $audioAssets } from '@/src/store/audioPlaylistsStore'
-
-import { useUnit } from 'effector-react'
+import { $currentPlaylist } from '@/src/store/audioPlaylistsStore'
 
 const playlistsChildrenRoutes = tabsScreenRoutes.playlists.children
 
 const PlaylistsScreenLayout = () => {
-  const { currentAlbum } = useUnit($audioAssets)
+  const { name } = useUnit($currentPlaylist)
 
   return (
     <Stack>
@@ -20,7 +19,7 @@ const PlaylistsScreenLayout = () => {
       <Stack.Screen
         name={playlistsChildrenRoutes['[id]'].name}
         options={{
-          headerTitle: currentAlbum.name,
+          headerTitle: name,
           headerBackVisible: true,
         }}
       />

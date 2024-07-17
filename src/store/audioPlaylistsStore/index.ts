@@ -1,28 +1,14 @@
 import { combine, createEvent, createStore } from 'effector'
-import type { Asset } from 'expo-media-library'
 import type {
-  TAudioAssets,
   TAlbums,
   TCurrentAlbun,
   TAddTrackToPlaylist,
   TRemoveTrackFromPlaylist,
   TAddPlaylist,
+  TCurrentAlbum,
 } from './types'
 import { getAlbumNameFromAsset } from './utils'
-
-export const saveAudioAssets = createEvent<Asset[]>()
-export const setCurrentAlbum = createEvent<TCurrentAlbun>()
-
-export const $audioAssets = createStore<TAudioAssets>({
-  assets: [],
-  currentAlbum: { albumId: '', name: '', assets: [] },
-})
-  .on(saveAudioAssets, (state, assets) => {
-    return { ...state, assets }
-  })
-  .on(setCurrentAlbum, (state, currentAlbum) => {
-    return { ...state, currentAlbum }
-  })
+import { $audioAssets } from '../audioAssetsStore'
 
 export const $deviceAudioAlbumsCollection = $audioAssets.map(({ assets }) => {
   const audioAlbumsCollection = assets.reduce<TAlbums>(
@@ -108,6 +94,16 @@ export const $playlists = createStore<TAlbums>(
 
     return state
   })
+
+export const setCurrentPlaylist = createEvent<TCurrentAlbun>()
+
+export const $currentPlaylist = createStore<TCurrentAlbum>({
+  albumId: '',
+  name: '',
+  assets: [],
+}).on(setCurrentPlaylist, (_, currentPlaylist) => {
+  return currentPlaylist
+})
 
 export const $combinedPlaylists = combine(
   $playlists,

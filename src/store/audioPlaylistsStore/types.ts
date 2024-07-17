@@ -15,6 +15,8 @@ export type TAlbums = Record<
   { name: string; isHandleAdded: boolean; list: Asset[] }
 >
 
+export type TCurrentAlbum = { albumId: string; name: string; assets: Asset[] }
+
 export type TAddTrackToPlaylist = {
   playlistName: string
   asset: Asset

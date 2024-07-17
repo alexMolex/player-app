@@ -1,7 +1,7 @@
 import { createEvent, createStore } from 'effector'
 import { Asset } from 'expo-media-library'
 import shuffleArrayExceptFirst from '@/src/utils/array/shuffleArrayExceptFirst'
-import $audioAssets from '../audioPlaylistsStore'
+import { $currentPlaylist } from '../audioPlaylistsStore'
 import { TAudioQueue, TAudioQueueStorage, TRepeatMode } from './types'
 
 const setQueue = createEvent<Asset[]>()
@@ -12,7 +12,7 @@ export const initStoreFromStorage = createEvent<TAudioQueueStorage>()
 
 export const setCurrentQueue = () => {
   const { currentAsset, isRandomMode } = $audioQueue.getState()
-  const currentAlbumAssets = $audioAssets.getState().currentAlbum.assets
+  const currentAlbumAssets = $currentPlaylist.getState().assets
 
   if (isRandomMode && currentAsset !== null) {
     setQueue(shuffleArrayExceptFirst(currentAsset, currentAlbumAssets))
