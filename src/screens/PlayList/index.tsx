@@ -1,8 +1,10 @@
 import { FlatList, Text } from 'react-native'
 import React from 'react'
 import { useUnit } from 'effector-react'
-import { $audioAssets } from '@/src/store/audioAssetsStore'
-import { $combinedPlaylists } from '@/src/store/playlistsStore'
+import {
+  $audioAssets,
+  $combinedPlaylists,
+} from '@/src/store/audioPlaylistsStore'
 import AudioItem from './AudioItem'
 
 const PlayList = () => {

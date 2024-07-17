@@ -4,8 +4,10 @@ import { useUnit } from 'effector-react'
 import PlaylistItem from '@/src/ui/PlaylistItem'
 import PressableLink from '@/src/ui/PressableLink'
 import { tabsScreenRoutes } from '@/src/routes'
-import { setCurrentAlbum } from '@/src/store/audioAssetsStore'
-import { $combinedPlaylists } from '@/src/store/playlistsStore'
+import {
+  setCurrentAlbum,
+  $combinedPlaylists,
+} from '@/src/store/audioPlaylistsStore'
 
 const PlayLists = () => {
   const combinedPlaylists = useUnit($combinedPlaylists)

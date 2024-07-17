@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router'
 import { tabsScreenRoutes } from '@/src/routes'
-import { $audioAssets } from '@/src/store/audioAssetsStore'
+import { $audioAssets } from '@/src/store/audioPlaylistsStore'
 
 import { useUnit } from 'effector-react'
 

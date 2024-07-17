@@ -1,7 +1,7 @@
 import { createEvent, createStore } from 'effector'
 import { Asset } from 'expo-media-library'
 import shuffleArrayExceptFirst from '@/src/utils/array/shuffleArrayExceptFirst'
-import $audioAssets from '../audioAssetsStore'
+import $audioAssets from '../audioPlaylistsStore'
 import { TAudioQueue, TAudioQueueStorage, TRepeatMode } from './types'
 
 const setQueue = createEvent<Asset[]>()

@@ -3,7 +3,7 @@ import getStateFromStorage from '@/src/utils/storage/getStateFromStorage'
 import saveStateToStorage from '@/src/utils/storage/saveStateToStorage'
 import { showErrorNotificationFx } from '../../notification'
 import { $playlists, PLAY_LIST_STORE_NAME, initStoreFromStorage } from '..'
-import { TAlbums } from '../../audioAssetsStore/types'
+import { TAlbums } from '../types'
 
 const useSyncStoreWithStorage = () => {
   useEffect(() => {
