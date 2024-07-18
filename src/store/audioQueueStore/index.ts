@@ -1,5 +1,5 @@
 import { createEvent, createStore } from 'effector'
-import { Asset } from 'expo-media-library'
+import type { Asset } from 'expo-media-library'
 import shuffleArrayExceptFirst from '@/src/utils/array/shuffleArrayExceptFirst'
 import { $currentPlaylist } from '../audioPlaylistsStore'
 import { TAudioQueue, TAudioQueueStorage, TRepeatMode } from './types'

@@ -23,7 +23,6 @@ export default function TabLayout() {
         <Tabs.Screen
           name={tabsScreenRoutes.index.name}
           options={{
-            title: 'favourite',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? 'musical-notes-outline' : 'musical-notes'}
@@ -35,7 +34,6 @@ export default function TabLayout() {
         <Tabs.Screen
           name={tabsScreenRoutes.playlists.name}
           options={{
-            title: 'Playlists',
             tabBarIcon: ({ color }) => {
               return (
                 <MaterialCommunityIcons
@@ -50,7 +48,6 @@ export default function TabLayout() {
         <Tabs.Screen
           name={tabsScreenRoutes.settings.name}
           options={{
-            title: 'Settings',
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="settings" color={color} />
             ),

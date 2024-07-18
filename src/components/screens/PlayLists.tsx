@@ -8,6 +8,7 @@ import {
   $combinedPlaylists,
   setCurrentPlaylist,
 } from '@/src/store/audioPlaylistsStore'
+import AddPlaylist from '../modals/AddPlaylist'
 
 const PlayLists = () => {
   const combinedPlaylists = useUnit($combinedPlaylists)
@@ -21,6 +22,8 @@ const PlayLists = () => {
   return (
     <FlatList
       data={combinedPlaylistsEntries}
+      keyboardShouldPersistTaps="handled"
+      ListHeaderComponent={<AddPlaylist />}
       keyExtractor={(item) => item[0]}
       renderItem={({ item }) => {
         const [albumId, album] = item
@@ -29,7 +32,6 @@ const PlayLists = () => {
             pathname={tabsScreenRoutes.playlists.children['[id]'].pathName}
             params={{ id: albumId, playlistTitle: album.name }}
             onPress={() => {
-              console.log('🚀 ~ PlayLists ~ albumId:', albumId)
               setCurrentPlaylist({
                 albumId: albumId,
                 name: album.name,
@@ -41,7 +43,6 @@ const PlayLists = () => {
               cover={require('@/src/assets/images/react-logo.png')}
               title={album.name}
               tracksCount={album.list.length}
-              onMenuPress={() => console.log('Pressed')}
             />
           </PressableLink>
         )

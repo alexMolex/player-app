@@ -1,24 +1,17 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import Menu from './Menu'
-import Avatar from './Avatar'
+import { View, Image, Text, StyleSheet } from 'react-native'
+import Entypo from '@expo/vector-icons/Entypo'
 
 type TProps = {
   cover: ReturnType<NodeRequire>
   title: string
   tracksCount: number
-  onMenuPress: () => void
 }
 
-const PlaylistItem: React.FC<TProps> = ({
-  cover,
-  title,
-  tracksCount,
-  onMenuPress,
-}) => {
+const PlaylistItem: React.FC<TProps> = ({ cover, title, tracksCount }) => {
   return (
     <View style={styles.container}>
-      <Avatar avatarUrl={cover} />
+      <Image source={cover} style={styles.cover} />
       <View style={styles.info}>
         <Text style={styles.title} numberOfLines={1}>
           {title}
@@ -27,13 +20,14 @@ const PlaylistItem: React.FC<TProps> = ({
           {tracksCount} tracks
         </Text>
       </View>
-      <Menu onMenuPress={onMenuPress} />
+      <Entypo name="chevron-right" size={24} color="black" />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    height: 100,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
@@ -48,6 +42,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  cover: {
+    width: 80,
+    height: 80,
+    backgroundColor: 'black',
+    borderRadius: 6,
   },
   tracksCount: {
     fontSize: 14,

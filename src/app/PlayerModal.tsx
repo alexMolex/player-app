@@ -1,1 +1,1 @@
-export { default } from '@/src/screens/modals/Player'
+export { default } from '@/src/components/screens/modals/Player'

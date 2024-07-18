@@ -1,6 +1,6 @@
 import { createEffect, createStore, sample } from 'effector'
 import { Audio, InterruptionModeAndroid } from 'expo-av'
-import { Asset } from 'expo-media-library'
+import type { Asset } from 'expo-media-library'
 import { showErrorNotificationFx } from '../notification'
 import { setCurrentAsset } from '../audioQueueStore'
 import { TAudioControl } from './types'

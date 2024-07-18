@@ -1,6 +1,6 @@
 import { createEvent, createStore, createEffect } from 'effector'
 import type { AVPlaybackStatusSuccess } from 'expo-av'
-import { Asset } from 'expo-media-library'
+import type { Asset } from 'expo-media-library'
 import { msPerSecond } from '@/src/utils/time/constants'
 import type { TAudioPlaybackStatus } from './types'
 import { $audioSound, prepareSoundFx } from '../audioSoundStore'
@@ -136,7 +136,7 @@ export const $audioPlaybackStatus = createStore<TAudioPlaybackStatus>({
     return {
       ...state,
       status,
-      timeoutMs: status.positionMillis ?? state.timeoutMs,
+      timeoutMs: status.positionMillis || state.timeoutMs,
     }
   })
   .on(setIsPlaying, (state, isPlaying) => {

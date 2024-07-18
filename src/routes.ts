@@ -23,12 +23,17 @@ export const rootLayoutRoutes = {
 }
 
 const playlistsName = 'Playlists' as const
-const settingsRouteName = 'Settings' as const
 const playlistsRouteIdName = '[id]' as const
+const addPlayListRouteName = 'addPlayList' as const
 
 const playlistItemRoute = {
   name: playlistsRouteIdName,
   pathName: `/${playlistsName}/${playlistsRouteIdName}`,
+}
+
+const addPlayListRoute = {
+  name: addPlayListRouteName,
+  pathName: `/${playlistsName}/${addPlayListRouteName}`,
 }
 
 const playlistsRoute = {
@@ -36,8 +41,11 @@ const playlistsRoute = {
   children: {
     index: indexRoute,
     [playlistItemRoute.name]: playlistItemRoute,
+    [addPlayListRoute.name]: addPlayListRoute,
   },
 }
+
+const settingsRouteName = 'Settings' as const
 
 const settingsRoute = {
   name: settingsRouteName,

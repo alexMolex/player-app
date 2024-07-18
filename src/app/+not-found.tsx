@@ -1,1 +1,1 @@
-export { default } from '@/src/screens/NotFound'
+export { default } from '@/src/components/screens/NotFound'
