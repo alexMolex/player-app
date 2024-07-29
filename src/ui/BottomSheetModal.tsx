@@ -6,7 +6,7 @@ const BOTTOM_SHEET_MAX_HEIGHT = WINDOW_HEIGHT * 0.9
 const BOTTOM_SHEET_MIN_HEIGHT = WINDOW_HEIGHT * 0.4
 const MAX_UPWARD_TRANSLATE_Y = BOTTOM_SHEET_MIN_HEIGHT - BOTTOM_SHEET_MAX_HEIGHT
 const MAX_DOWNWARD_TRANSLATE_Y = 0
-const DRAG_THRESHOLD = 100
+const DRAG_THRESHOLD = 80
 
 const BottomSheetModal: React.FC<{
   isVisible: boolean
@@ -40,7 +40,7 @@ const BottomSheetModal: React.FC<{
           currentGestureDy.current > BOTTOM_SHEET_MAX_HEIGHT * 0.15
         const isSwipingUp = dy <= -DRAG_THRESHOLD
         const isSwipingUpperMaxUpward =
-          -currentGestureDy.current <= MAX_UPWARD_TRANSLATE_Y
+          currentGestureDy.current <= MAX_UPWARD_TRANSLATE_Y
 
         if (isSwipingDownForClose) {
           closeModal()
