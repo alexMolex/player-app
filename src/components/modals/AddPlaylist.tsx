@@ -1,15 +1,8 @@
+import React, { useState, useRef } from 'react'
+import { Modal, View, TextInput, Button, StyleSheet } from 'react-native'
 import useBoolean from '@/src/hooks/useBoolean'
 import { addPlaylist } from '@/src/store/audioPlaylistsStore'
 import AddPlaylist from '@/src/ui/AddPlaylist'
-import React, { useState, useRef } from 'react'
-import {
-  Modal,
-  View,
-  TextInput,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native'
 
 const AddPlaylistModal = () => {
   const [isVisibleModal, openModal, closeModal] = useBoolean(false)
@@ -36,49 +29,31 @@ const AddPlaylistModal = () => {
         }}
         onRequestClose={closeModal}
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPressOut={closeModal}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TextInput
-                placeholder="Название плейлиста"
-                value={playlistName}
-                onChangeText={setPlaylistName}
-                style={styles.textInput}
-                ref={textInputRef}
-              />
-              <View style={styles.buttons}>
-                <View style={styles.button}>
-                  <Button
-                    title="Отменить"
-                    color="gray"
-                    onPress={(event) => {
-                      event.preventDefault()
-                      event.stopPropagation()
-                      closeModal()
-                    }}
-                  />
-                </View>
-                <View style={styles.button}>
-                  <Button title="Сохранить" onPress={handleAdd} />
-                </View>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TextInput
+              placeholder="Название плейлиста"
+              value={playlistName}
+              onChangeText={setPlaylistName}
+              style={styles.textInput}
+              ref={textInputRef}
+            />
+            <View style={styles.buttons}>
+              <View style={styles.button}>
+                <Button title="Отменить" color="gray" onPress={closeModal} />
+              </View>
+              <View style={styles.button}>
+                <Button title="Сохранить" onPress={handleAdd} />
               </View>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
   buttons: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -91,6 +66,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalOverlay: {
+    flex: 1,
   },
   modalView: {
     width: '80%',
